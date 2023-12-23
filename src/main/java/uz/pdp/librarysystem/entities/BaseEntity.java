@@ -30,12 +30,12 @@ public abstract class BaseEntity {
     @CreationTimestamp
     @JsonSerialize(using = LocalDateTimeSerializer.class)
     @JsonDeserialize(using = LocalDateTimeDeserializer.class)
-    protected LocalDateTime createdDate;
+    protected LocalDateTime createdDate  = LocalDateTime.now();
 
     @UpdateTimestamp
     @JsonSerialize(using = LocalDateTimeSerializer.class)
     @JsonDeserialize(using = LocalDateTimeDeserializer.class)
-    protected LocalDateTime updatedDate;
+    protected LocalDateTime updatedDate = LocalDateTime.now();
 
     protected Boolean isActive = true;
 }

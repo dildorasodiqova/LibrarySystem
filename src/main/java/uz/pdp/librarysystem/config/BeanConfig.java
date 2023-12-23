@@ -1,4 +1,4 @@
-package uz.pdp.eticket.config;
+package uz.pdp.librarysystem.config;
 
 import org.modelmapper.ModelMapper;
 import org.springframework.context.annotation.Bean;

@@ -36,7 +36,7 @@ public class UserController {
 
 
     @PreAuthorize("hasAuthority('ADMIN')")
-    @DeleteMapping("/{userId}")
+    @DeleteMapping("/delete/{userId}")
     public String delete(@PathVariable UUID userId) {
         return userServiceImpl.deleteUser(userId);
     }
