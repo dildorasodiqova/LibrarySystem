@@ -3,6 +3,7 @@ package uz.pdp.librarysystem.repository;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.transaction.annotation.Transactional;
@@ -21,6 +22,12 @@ public interface BookRepository extends JpaRepository<BookEntity, UUID> {
     """)
     Optional<BookEntity> getBookEntitiesByAuthorAndName(String author, String name);
 
+    @Transactional
+    @Modifying
+    @Query("""
+     UPDATE books b SET b.nowCount = :count WHERE b.id = :bookId
+    """)
+    int updateNowCount(@Param("count")Integer count,@Param("bookId") UUID bookId);
 
     Page<BookEntity> findAllByIsActiveTrue(Pageable pageable);
 

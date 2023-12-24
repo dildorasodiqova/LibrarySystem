@@ -12,6 +12,7 @@ import uz.pdp.librarysystem.entities.BookEntity;
 import uz.pdp.librarysystem.entities.BookingEntity;
 import uz.pdp.librarysystem.entities.UserEntity;
 import uz.pdp.librarysystem.entities.enums.BookStatus;
+import uz.pdp.librarysystem.exception.BadRequestException;
 import uz.pdp.librarysystem.exception.DataNotFoundException;
 import uz.pdp.librarysystem.repository.BookRepository;
 import uz.pdp.librarysystem.repository.BookingRepository;
@@ -35,7 +36,6 @@ public class BookingServiceImpl implements BookingService {
 
     /**
      * bu method faqat band qilib qo'yadi
-     *
      * @param dto
      * @return
      */
@@ -43,8 +43,13 @@ public class BookingServiceImpl implements BookingService {
     public String save(BookingCreateDto dto) {
         UserEntity user = userRepository.findById(dto.getUserId()).orElseThrow(() -> new DataNotFoundException("User not found"));
         BookEntity book = bookRepository.findById(dto.getBookId()).orElseThrow(() -> new DataNotFoundException("Book not found"));
-        bookingRepository.save(new BookingEntity(user, book, LocalDate.now().plusDays(3), BookStatus.CREATED));
-        return "Successfully";
+        if (book.getNowCount() > 0) {
+            bookRepository.updateNowCount(book.getNowCount() - 1, book.getId());
+            bookingRepository.save(new BookingEntity(user, book, LocalDate.now().plusDays(3), BookStatus.CREATED));
+            return "Successfully";
+        }else {
+            throw new BadRequestException("There are no books left for rent");
+        }
     }
 
 
@@ -90,8 +95,16 @@ public class BookingServiceImpl implements BookingService {
     }
 
     @Override
-    public String updateStatus(UUID userId, UUID bookingId, BookStatus bookStatus) {
-        bookingRepository.updateStatus(userId, bookingId, bookStatus);
+    public String updateStatus(UUID bookingId, BookStatus bookStatus) {
+        BookingEntity booking = bookingRepository.findById(bookingId).orElseThrow(() -> new DataNotFoundException("Booking not found"));
+
+        if (bookStatus.name().equals("RETURNED") || bookStatus.name().equals("CANCELED") ){
+            booking.getBook().setNowCount(booking.getBook().getNowCount() + 1);
+        } else{
+            booking.getBook().setNowCount(booking.getBook().getNowCount() - 1);
+        }
+        bookRepository.save(booking.getBook());
+        bookingRepository.updateStatus(bookingId, bookStatus);
         return "successfully";
     }
 

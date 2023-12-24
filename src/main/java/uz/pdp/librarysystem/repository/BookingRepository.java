@@ -27,8 +27,8 @@ public interface BookingRepository extends JpaRepository<BookingEntity, UUID> {
 
 
     @Modifying
-    @Query("UPDATE booking b SET b.status = :bookStatus WHERE b.user.id = :userId AND b.id = :bookingId")
-    int updateStatus(@Param("userId") UUID userId, @Param("bookingId") UUID bookingId, @Param("bookStatus") BookStatus bookStatus);
+    @Query("UPDATE booking b SET b.status = :bookStatus WHERE b.id = :bookingId")
+    int updateStatus(@Param("bookingId") UUID bookingId, @Param("bookStatus") BookStatus bookStatus);
 
 
     @Transactional

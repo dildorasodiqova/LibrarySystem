@@ -20,7 +20,7 @@ public interface BookingService {
     List<BookingResponseDto> bookingOfUser(UUID uuid, int page, int size);
 
 
-    String updateStatus(UUID uuid, UUID bookingId, BookStatus bookStatus);
+    String updateStatus(UUID bookingId, BookStatus bookStatus);
 }
 
 

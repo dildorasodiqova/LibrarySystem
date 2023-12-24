@@ -70,13 +70,13 @@ public class BookingController {
             security = @SecurityRequirement(name = "pre authorize", scopes = {"MODERATOR"})
     )
     @PreAuthorize(value = "hasAuthority('MODERATOR')")
-    @GetMapping("/updateStatus/{bookingId}")
-    public ResponseEntity<String> markBookAsTaken(
+    @PutMapping("/updateStatus/{bookingId}")
+    public ResponseEntity<String> updateStatus(
             Principal principal,
             @PathVariable UUID bookingId,
             @RequestParam BookStatus bookStatus
             ) {
-        return ResponseEntity.ok(bookingService.updateStatus(UUID.fromString(principal.getName()), bookingId, bookStatus));
+        return ResponseEntity.ok(bookingService.updateStatus(bookingId, bookStatus));
     }
 
 

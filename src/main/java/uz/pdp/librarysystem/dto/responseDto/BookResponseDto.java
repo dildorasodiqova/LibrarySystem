@@ -27,9 +27,4 @@ public class BookResponseDto {
     private LocalDate yearOfWriting;
     private LocalDateTime createdDate;
 
-    private ShelfResponseDto shelf;
-
-    private ClosetResponseDto closet;
-
-    private FloorResponseDto floor;
 }
