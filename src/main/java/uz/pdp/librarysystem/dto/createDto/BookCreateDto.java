@@ -6,6 +6,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.time.LocalDate;
+import java.util.UUID;
 
 
 @AllArgsConstructor
@@ -17,4 +18,8 @@ public class BookCreateDto {
     private String author;
     private Integer count;
     private LocalDate yearOfWriting;
+
+    private UUID shelfId;
+    private UUID closetId;
+    private UUID floorId;
 }

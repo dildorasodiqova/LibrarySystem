@@ -1,8 +1,14 @@
 package uz.pdp.librarysystem.dto.responseDto;
+import jakarta.persistence.CascadeType;
+import jakarta.persistence.FetchType;
+import jakarta.persistence.ManyToOne;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import uz.pdp.librarysystem.entities.ClosetEntity;
+import uz.pdp.librarysystem.entities.FloorEntity;
+import uz.pdp.librarysystem.entities.ShelfEntity;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -20,4 +26,10 @@ public class BookResponseDto {
     private Integer oldCount;
     private LocalDate yearOfWriting;
     private LocalDateTime createdDate;
+
+    private ShelfResponseDto shelf;
+
+    private ClosetResponseDto closet;
+
+    private FloorResponseDto floor;
 }

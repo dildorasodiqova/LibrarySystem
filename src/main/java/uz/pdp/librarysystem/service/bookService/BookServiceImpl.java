@@ -8,9 +8,12 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import uz.pdp.librarysystem.dto.createDto.BookCreateDto;
 import uz.pdp.librarysystem.dto.responseDto.BookResponseDto;
+import uz.pdp.librarysystem.dto.responseDto.ClosetResponseDto;
+import uz.pdp.librarysystem.dto.responseDto.FloorResponseDto;
+import uz.pdp.librarysystem.dto.responseDto.ShelfResponseDto;
 import uz.pdp.librarysystem.entities.BookEntity;
-import uz.pdp.librarysystem.entities.UserEntity;
 import uz.pdp.librarysystem.exception.DataNotFoundException;
+import uz.pdp.librarysystem.exception.ExceededLimitException;
 import uz.pdp.librarysystem.repository.BookRepository;
 
 import java.util.ArrayList;
@@ -28,11 +31,14 @@ public class BookServiceImpl implements BookService{
         Optional<BookEntity> book = bookRepository.getBookEntitiesByAuthorAndName(dto.getAuthor(), dto.getName());
         if (book.isPresent()){
             BookEntity bookEntity = book.get();
+            if(bookEntity.getShelf().getCountOfBook() >= 20){
+                throw new ExceededLimitException("This shelf is full of books. please put it on another shelf");
+            }
             bookEntity.setNowCount(bookEntity.getNowCount() + dto.getCount());
             bookEntity.setOldCount(bookEntity.getOldCount() + dto.getCount());
             bookRepository.save(bookEntity);
         }
-        BookEntity bookEntity = new BookEntity(dto.getName(), dto.getAuthor(), dto.getYearOfWriting(), dto.getCount(), dto.getCount());
+        BookEntity bookEntity = new BookEntity(dto.getName(), dto.getAuthor(), dto.getYearOfWriting(), dto.getCount(), dto.getCount(), dto.getShelfId(),dto.getClosetId(), dto.getFloorId());
         bookRepository.save(bookEntity);
         return "Successfully";
     }
@@ -67,17 +73,20 @@ public class BookServiceImpl implements BookService{
         return parse(bookEntities.getContent());
     }
 
-
-
-    private BookResponseDto parse(BookEntity bookEntity){
-        return new BookResponseDto(bookEntity.getId(), bookEntity.getName(), bookEntity.getAuthor(), bookEntity.getNowCount(), bookEntity.getOldCount(), bookEntity.getYearOfWriting(), bookEntity.getCreatedDate());
+    private BookResponseDto parse(BookEntity bk){
+        FloorResponseDto floor = new FloorResponseDto(bk.getFloorId(), bk.getFloor().getNumber());
+        ClosetResponseDto closet = new ClosetResponseDto(bk.getClosetId(), bk.getCloset().getFloorId(), bk.getCloset().getCode());
+        ShelfResponseDto shelf = new ShelfResponseDto(bk.getShelf().getRowNumber(), bk.getShelfId(), bk.getShelf().getClosetId(), bk.getShelf().getCountOfBook());
+        return new BookResponseDto(bk.getId(), bk.getName(), bk.getAuthor(), bk.getNowCount(), bk.getOldCount(), bk.getYearOfWriting(), bk.getCreatedDate(), shelf, closet, floor);
     }
-
 
     private List<BookResponseDto> parse(List<BookEntity> bookEntities) {
         List<BookResponseDto> list = new ArrayList<>();
-        for (BookEntity bookEntity : bookEntities) {
-            list.add(new BookResponseDto(bookEntity.getId(), bookEntity.getName(), bookEntity.getAuthor(), bookEntity.getNowCount(), bookEntity.getOldCount(), bookEntity.getYearOfWriting(), bookEntity.getCreatedDate()));
+        for (BookEntity bk : bookEntities) {
+            FloorResponseDto floor = new FloorResponseDto(bk.getFloorId(), bk.getFloor().getNumber());
+            ClosetResponseDto closet = new ClosetResponseDto(bk.getClosetId(), bk.getCloset().getFloorId(), bk.getCloset().getCode());
+            ShelfResponseDto shelf = new ShelfResponseDto(bk.getShelf().getRowNumber(), bk.getShelfId(), bk.getShelf().getClosetId(), bk.getShelf().getCountOfBook());
+            list.add(new BookResponseDto(bk.getId(), bk.getName(), bk.getAuthor(), bk.getNowCount(), bk.getOldCount(), bk.getYearOfWriting(), bk.getCreatedDate(), shelf, closet, floor));
         }
         return list;
     }

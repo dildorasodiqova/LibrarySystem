@@ -14,6 +14,6 @@ import java.util.UUID;
 public class ShelfResponseDto {
     private Integer rowNumber;
     private UUID shelfId;
-    private UUID cosetId;
+    private UUID closetId;
     private Integer countOfBook;
 }
