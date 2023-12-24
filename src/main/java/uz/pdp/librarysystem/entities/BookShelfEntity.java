@@ -15,27 +15,27 @@ import java.util.UUID;
 @Entity(name = "book_shelf")
 public class BookShelfEntity extends BaseEntity{
 
-    @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     @JoinColumn(name = "book_id",insertable = false, updatable = false)
     private BookEntity book;
     @Column(name = "book_id")
     private UUID bookId;
 
-    @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    @JoinColumn(name = "shelf_id")
+    @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @JoinColumn(name = "shelf_id", insertable = false, updatable = false )
     private ShelfEntity shelf;
     @Column(name = "shelf_Id")
     private UUID shelfId;
 
     private Integer count; /// shu kitobdan mana shu tokchada nechta turgani.
 
-    @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     @JoinColumn(name = "closet_Id", insertable = false, updatable = false)
     private ClosetEntity closet;
     @Column(name = "closet_Id")
     private UUID closetId;
 
-    @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     @JoinColumn(name = "floor_Id", insertable = false, updatable = false)
     private FloorEntity floor;
     @Column(name = "floor_Id")

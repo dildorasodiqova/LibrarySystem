@@ -13,4 +13,5 @@ public interface ShelfService {
     String remove(UUID shelfId);
     List<ShelfResponseDto> getAll(Integer page, Integer size);
     ShelfResponseDto getById(UUID shelfId);
+
 }

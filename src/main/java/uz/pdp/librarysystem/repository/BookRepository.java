@@ -40,12 +40,12 @@ public interface BookRepository extends JpaRepository<BookEntity, UUID> {
     Page<BookEntity> searchBook(String word, Pageable pageRequest);
 
 
-
-    @Query("""
-            select b.name as name, b.author as author , b.oldCount as oldCount, b.nowCount as nowCount,
-            b.yearOfWriting as yearOfWriting,sh.closetId as closetId, sh.countOfBook as countOfBook, 
-             sh.rowNumber as rowNumber, c.floorId as floorId, c.code as code,f.number as number
-            from books b join b.floor f  join b.closet c  join b.shelf sh where b.id = :bookId
-            """)
-    List<BookMapper> mapper(@Param("bookId") UUID bookId);
+//
+//    @Query("""
+//            select b.name as name, b.author as author , b.oldCount as oldCount, b.nowCount as nowCount,
+//            b.yearOfWriting as yearOfWriting,sh.closetId as closetId, sh.countOfBook as countOfBook,
+//             sh.rowNumber as rowNumber, c.floorId as floorId, c.code as code,f.number as number
+//            from books b join b.floor f  join b.closet c  join b.shelf sh where b.id = :bookId
+//            """)
+//    List<BookMapper> mapper(@Param("bookId") UUID bookId);
 }

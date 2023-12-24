@@ -6,10 +6,12 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import uz.pdp.librarysystem.dto.createDto.BookCreateDto;
+import uz.pdp.librarysystem.dto.responseDto.BookAllDto;
 import uz.pdp.librarysystem.dto.responseDto.BookResponseDto;
 import uz.pdp.librarysystem.entities.BookEntity;
 import uz.pdp.librarysystem.exception.DataNotFoundException;
 import uz.pdp.librarysystem.repository.BookRepository;
+import uz.pdp.librarysystem.service.bookShelfService.BookShelfService;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -20,7 +22,7 @@ import java.util.UUID;
 @RequiredArgsConstructor
 public class BookServiceImpl implements BookService{
     private final BookRepository bookRepository;
-
+    private final BookShelfService bookShelfService;
     @Override
     public String save(BookCreateDto dto) {
         Optional<BookEntity> book = bookRepository.getBookEntitiesByAuthorAndName(dto.getAuthor(), dto.getName());
@@ -68,13 +70,15 @@ public class BookServiceImpl implements BookService{
     }
 
     private BookResponseDto parse(BookEntity bk){
-        return new BookResponseDto(bk.getId(), bk.getName(), bk.getAuthor(), bk.getNowCount(), bk.getOldCount(), bk.getYearOfWriting(), bk.getCreatedDate());
+        List<BookAllDto> dtos = bookShelfService.getBookInfo(bk.getId());
+        return new BookResponseDto(bk.getId(), bk.getName(), bk.getAuthor(), bk.getNowCount(), bk.getOldCount(), bk.getYearOfWriting(), bk.getCreatedDate(), dtos);
     }
 
     private List<BookResponseDto> parse(List<BookEntity> bookEntities) {
         List<BookResponseDto> list = new ArrayList<>();
         for (BookEntity bk : bookEntities) {
-            list.add(new BookResponseDto(bk.getId(), bk.getName(), bk.getAuthor(), bk.getNowCount(), bk.getOldCount(), bk.getYearOfWriting(), bk.getCreatedDate()));
+            List<BookAllDto> dtos = bookShelfService.getBookInfo(bk.getId());
+            list.add(new BookResponseDto(bk.getId(), bk.getName(), bk.getAuthor(), bk.getNowCount(), bk.getOldCount(), bk.getYearOfWriting(), bk.getCreatedDate(), dtos));
         }
         return list;
     }

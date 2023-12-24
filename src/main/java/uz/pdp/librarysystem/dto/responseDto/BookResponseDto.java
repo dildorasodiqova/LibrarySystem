@@ -12,6 +12,7 @@ import uz.pdp.librarysystem.entities.ShelfEntity;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.UUID;
 
 @AllArgsConstructor
@@ -26,5 +27,6 @@ public class BookResponseDto {
     private Integer oldCount;
     private LocalDate yearOfWriting;
     private LocalDateTime createdDate;
+    private List<BookAllDto> bookAllDtos;
 
 }

@@ -56,6 +56,8 @@ public class ShelfServiceImpl implements ShelfService{
         return parse(shelf);
     }
 
+
+
     private ShelfResponseDto parse( ShelfEntity shelf){
         return new ShelfResponseDto(shelf.getRowNumber(), shelf.getId(), shelf.getClosetId(), shelf.getCountOfBook());
     }

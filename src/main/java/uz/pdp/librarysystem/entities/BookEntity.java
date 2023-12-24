@@ -22,14 +22,4 @@ public class BookEntity extends BaseEntity{
     private Integer oldCount;
     private Integer nowCount;
 
-
-
-    public BookEntity(String name, String author, LocalDate yearOfWriting, Integer count, Integer count1) {
-        this.name = name;
-        this.author = author;
-        this.yearOfWriting = yearOfWriting;
-        this.oldCount = count;
-        this.nowCount = count1;
-
-    }
 }
