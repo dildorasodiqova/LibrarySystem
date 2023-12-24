@@ -8,9 +8,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.transaction.annotation.Transactional;
 import uz.pdp.librarysystem.entities.BookEntity;
-import uz.pdp.librarysystem.mapper.BookMapper;
 
-import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
