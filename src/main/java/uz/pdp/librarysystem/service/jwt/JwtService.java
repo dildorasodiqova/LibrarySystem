@@ -4,6 +4,7 @@ import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jws;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.security.Keys;
+import org.hibernate.cfg.Configuration;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.authentication.AuthenticationCredentialsNotFoundException;
 import org.springframework.security.core.GrantedAuthority;
@@ -11,6 +12,7 @@ import org.springframework.stereotype.Service;
 import uz.pdp.librarysystem.entities.UserEntity;
 
 
+import java.util.Collections;
 import java.util.Date;
 import java.util.Map;
 
@@ -35,6 +37,7 @@ public class JwtService {
                     .setExpiration(new Date(iat.getTime() + accessExpiry))
                     .addClaims(getAuthorities(user))
                     .signWith(Keys.hmacShaKeyFor(secret.getBytes()))
+                    .claim("roles", Collections.singleton(user.getRole().name()))
                     .compact();
         }
         throw new AuthenticationCredentialsNotFoundException("User is not active");

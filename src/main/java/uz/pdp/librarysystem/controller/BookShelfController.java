@@ -5,13 +5,12 @@ import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import uz.pdp.librarysystem.dto.createDto.BookShelfCreateDto;
 import uz.pdp.librarysystem.dto.createDto.BookingCreateDto;
 import uz.pdp.librarysystem.service.bookShelfService.BookShelfService;
+
+import java.util.UUID;
 
 @RestController
 @RequiredArgsConstructor
@@ -29,6 +28,17 @@ public class BookShelfController {
     @PostMapping()
     public ResponseEntity<String> bookPlacement(@RequestBody BookShelfCreateDto dto) {
         return ResponseEntity.ok(bookShelfService.bookPlacement(dto));
+    }
+
+    @Operation(
+            description = "This API makes the books delete of shelf",
+            method = "DELETE method is supported",
+            security = @SecurityRequirement(name = "pre authorize", scopes = {"MODERATOR"})
+    )
+    @PreAuthorize(value = "hasAuthority('MODERATOR')")
+    @PutMapping("/deleteBookOfShelf")
+    public ResponseEntity<String> delete(@PathVariable BookShelfCreateDto dto) {
+        return ResponseEntity.ok(bookShelfService.remove(dto));
     }
 
 }

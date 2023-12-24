@@ -18,8 +18,4 @@ public class BookCreateDto {
     private String author;
     private Integer count;
     private LocalDate yearOfWriting;
-
-    private UUID shelfId;
-    private UUID closetId;
-    private UUID floorId;
 }

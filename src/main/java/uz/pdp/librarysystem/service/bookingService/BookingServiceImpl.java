@@ -40,8 +40,8 @@ public class BookingServiceImpl implements BookingService {
      * @return
      */
     @Override
-    public String save(BookingCreateDto dto) {
-        UserEntity user = userRepository.findById(dto.getUserId()).orElseThrow(() -> new DataNotFoundException("User not found"));
+    public String save(UUID userId, BookingCreateDto dto) {
+        UserEntity user = userRepository.findById(userId).orElseThrow(() -> new DataNotFoundException("User not found"));
         BookEntity book = bookRepository.findById(dto.getBookId()).orElseThrow(() -> new DataNotFoundException("Book not found"));
         if (book.getNowCount() > 0) {
             bookRepository.updateNowCount(book.getNowCount() - 1, book.getId());

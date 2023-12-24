@@ -9,7 +9,7 @@ import java.util.List;
 import java.util.UUID;
 
 public interface BookingService {
-    String save(BookingCreateDto dto);
+    String save(UUID userId, BookingCreateDto dto);
     List<BookingResponseDto> viewBooks(Integer page, Integer size);
 
     void delete();

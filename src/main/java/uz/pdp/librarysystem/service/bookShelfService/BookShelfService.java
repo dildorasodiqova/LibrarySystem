@@ -11,4 +11,5 @@ public interface BookShelfService {
 
     List<BookAllDto> getBookInfo(UUID id);
 
+    String remove(BookShelfCreateDto dto);
 }

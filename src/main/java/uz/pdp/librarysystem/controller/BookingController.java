@@ -29,8 +29,8 @@ public class BookingController {
     )
     @PreAuthorize(value = "hasAuthority('USER')")
     @PostMapping()
-    public ResponseEntity<String> create(@RequestBody BookingCreateDto dto) {
-        return ResponseEntity.ok(bookingService.save(dto));
+    public ResponseEntity<String> create(@RequestBody BookingCreateDto dto, Principal principal) {
+        return ResponseEntity.ok(bookingService.save(UUID.fromString(principal.getName()) , dto));
     }
 
 

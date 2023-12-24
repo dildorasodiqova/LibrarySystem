@@ -28,14 +28,13 @@ public class BookServiceImpl implements BookService{
         Optional<BookEntity> book = bookRepository.getBookEntitiesByAuthorAndName(dto.getAuthor(), dto.getName());
         if (book.isPresent()){
             BookEntity bookEntity = book.get();
-
             bookEntity.setNowCount(bookEntity.getNowCount() + dto.getCount());
             bookEntity.setOldCount(bookEntity.getOldCount() + dto.getCount());
-
+            bookRepository.save(bookEntity);
+        }else {
+            BookEntity bookEntity = new BookEntity(dto.getName(), dto.getAuthor(), dto.getYearOfWriting(), dto.getCount(), dto.getCount());
             bookRepository.save(bookEntity);
         }
-        BookEntity bookEntity = new BookEntity(dto.getName(), dto.getAuthor(), dto.getYearOfWriting(), dto.getCount(), dto.getCount());
-        bookRepository.save(bookEntity);
         return "Successfully";
     }
 
