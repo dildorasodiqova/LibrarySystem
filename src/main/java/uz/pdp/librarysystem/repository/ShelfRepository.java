@@ -18,5 +18,6 @@ public interface ShelfRepository extends JpaRepository<ShelfEntity, UUID> {
 
 
     Page<ShelfEntity> findAllByIsActiveTrue(PageRequest pageRequest);
+    List<ShelfEntity> findAllByRowNumber(Integer rowNumber);
 
 }

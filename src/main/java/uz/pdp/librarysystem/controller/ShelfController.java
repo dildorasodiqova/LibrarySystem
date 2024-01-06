@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.*;
 import uz.pdp.librarysystem.dto.createDto.ClosetCreateDto;
 import uz.pdp.librarysystem.dto.createDto.ShelfCreateDto;
 import uz.pdp.librarysystem.dto.responseDto.ClosetResponseDto;
+import uz.pdp.librarysystem.dto.responseDto.FloorResponseDto;
 import uz.pdp.librarysystem.dto.responseDto.ShelfResponseDto;
 import uz.pdp.librarysystem.service.shelfService.ShelfService;
 
@@ -32,6 +33,18 @@ public class ShelfController {
     public ResponseEntity<String> create(@RequestBody ShelfCreateDto dto) {
         return ResponseEntity.ok(shelfService.save(dto));
     }
+
+    @Operation(
+            description = "This method return all floors",
+            method = "GET method is supported",
+            security = @SecurityRequirement(name = "pre authorize", scopes = {"ADMIN"})
+    )
+    @PreAuthorize(value = "hasAuthority('ADMIN')")
+    @GetMapping("/getShelfOfClose")
+    public ResponseEntity<List<ShelfResponseDto>> getAll(@RequestParam Integer floorNumber) {
+        return ResponseEntity.ok(shelfService.getShelfOfCloses(floorNumber));
+    }
+
 
 
     @Operation(

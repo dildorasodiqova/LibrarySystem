@@ -5,9 +5,11 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.jpa.repository.JpaRepository;
 import uz.pdp.librarysystem.entities.ClosetEntity;
 
+import java.util.List;
 import java.util.UUID;
 
 public interface ClosetRepository extends JpaRepository<ClosetEntity, UUID> {
     Page<ClosetEntity> findAllByIsActiveTrue(PageRequest pageRequest);
     Boolean existsAllByCode(String code);
+    List<ClosetEntity> findAllByFloorId(UUID floorId);
 }

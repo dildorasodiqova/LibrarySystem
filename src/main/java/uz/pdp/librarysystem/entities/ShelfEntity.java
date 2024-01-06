@@ -14,7 +14,7 @@ import java.util.UUID;
 @Getter
 @Entity(name = "shelf") // bu tokcha
 public class ShelfEntity extends BaseEntity {
-     private Integer rowNumber;
+     private Integer rowNumber; // bu shkafni qaysi qatoriligi
      private UUID closetId;
      private Integer countOfBook; ///bu tokchaga nechta kitob solingani
 }

@@ -15,4 +15,5 @@ public class ClosetResponseDto {
     private UUID closetId;
     private UUID floorId;
     private String code;
+
 }

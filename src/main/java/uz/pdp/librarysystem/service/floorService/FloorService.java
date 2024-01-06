@@ -13,4 +13,5 @@ public interface FloorService {
     String remove(UUID floorId);
     List<FloorResponseDto> getAll(Integer page, Integer size);
     FloorResponseDto getById(UUID floorId);
+    UUID findByFloor(Integer floorNumber);
 }

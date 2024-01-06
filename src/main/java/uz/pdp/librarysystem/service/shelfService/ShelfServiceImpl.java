@@ -5,22 +5,25 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import uz.pdp.librarysystem.dto.createDto.ShelfCreateDto;
+import uz.pdp.librarysystem.dto.responseDto.ClosetResponseDto;
+import uz.pdp.librarysystem.dto.responseDto.FloorResponseDto;
 import uz.pdp.librarysystem.dto.responseDto.ShelfResponseDto;
+import uz.pdp.librarysystem.entities.ClosetEntity;
 import uz.pdp.librarysystem.entities.ShelfEntity;
-import uz.pdp.librarysystem.entities.UserEntity;
 import uz.pdp.librarysystem.exception.DataAlreadyExistsException;
 import uz.pdp.librarysystem.exception.DataNotFoundException;
 import uz.pdp.librarysystem.repository.ShelfRepository;
+import uz.pdp.librarysystem.service.closetService.ClosetService;
+import uz.pdp.librarysystem.service.floorService.FloorService;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
-import java.util.UUID;
+import java.util.*;
 
 @Service
 @RequiredArgsConstructor ///this is tokcha
 public class ShelfServiceImpl implements ShelfService{
     private final ShelfRepository shelfRepository;
+    private final ClosetService closetService ;
+    private final FloorService floorService;
 
     @Override
     public String save(ShelfCreateDto dto) {
@@ -56,6 +59,29 @@ public class ShelfServiceImpl implements ShelfService{
         return parse(shelf);
     }
 
+    /**
+     * Bugun suhbatda qoshgan methodim. Birinchi qismi shu. yani api orqali shu methodga murojat qiladi
+     * @param  floorNumber
+     * @return
+     */
+    @Override
+    public List<ShelfResponseDto> getShelfOfCloses(Integer floorNumber) {
+        List<ClosetEntity> closes = closetService.getCloses(floorNumber);
+        return  getFreePlace(closes);
+    }
+
+
+    @Override
+    public List<ShelfResponseDto> getFreePlace(List<ClosetEntity> closes) {  /// 1 ta qavatdagi shkaflar
+        List<ShelfResponseDto> list = new ArrayList<>();
+        for (ClosetEntity close : closes) {
+            FloorResponseDto byId = floorService.getById(close.getFloorId());
+            ShelfEntity allByClosetIdAndRowNumber = shelfRepository.findAllByClosetIdAndRowNumber(close.getId(), byId.getNumber()).orElseThrow(()-> new DataNotFoundException(""));
+            int nowCount = 20 - allByClosetIdAndRowNumber.getCountOfBook();
+            list.add(new ShelfResponseDto(byId.getNumber(), allByClosetIdAndRowNumber.getId(), close.getId(), nowCount));
+        }
+        return list;
+    }
 
 
     private ShelfResponseDto parse( ShelfEntity shelf){

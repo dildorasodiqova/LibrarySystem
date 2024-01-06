@@ -53,6 +53,13 @@ public class FloorServiceImpl implements FloorService{
         return parse(floorEntity);
     }
 
+    @Override
+    public UUID findByFloor(Integer floorNumber) {
+        FloorEntity floorEntity = floorRepository.findByNumber(floorNumber).orElseThrow(() -> new DataNotFoundException("Data not found"));
+        return floorEntity.getId();
+    }
+
+
     private FloorResponseDto parse(FloorEntity floorEntity){
         return new FloorResponseDto(floorEntity.getId(), floorEntity.getNumber()) ;
     }

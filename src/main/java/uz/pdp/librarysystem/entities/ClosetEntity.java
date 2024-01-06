@@ -14,7 +14,7 @@ import java.util.UUID;
 @Getter
 @Entity(name = "closet") // bu shkaf
 public class ClosetEntity extends BaseEntity {
-    private UUID floorId;
+    private UUID floorId; // bu birinchi qavat yo 2 degani
     private String code; // bu qaysi shkafligini bilish un
 
 }

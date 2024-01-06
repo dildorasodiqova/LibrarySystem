@@ -6,12 +6,16 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import uz.pdp.librarysystem.dto.createDto.ClosetCreateDto;
 import uz.pdp.librarysystem.dto.responseDto.ClosetResponseDto;
+import uz.pdp.librarysystem.dto.responseDto.FloorResponseDto;
+import uz.pdp.librarysystem.dto.responseDto.ShelfResponseDto;
 import uz.pdp.librarysystem.entities.ClosetEntity;
 import uz.pdp.librarysystem.entities.FloorEntity;
 import uz.pdp.librarysystem.exception.DataAlreadyExistsException;
 import uz.pdp.librarysystem.exception.DataNotFoundException;
 import uz.pdp.librarysystem.repository.ClosetRepository;
+import uz.pdp.librarysystem.repository.FloorRepository;
 import uz.pdp.librarysystem.service.floorService.FloorService;
+import uz.pdp.librarysystem.service.shelfService.ShelfService;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -21,6 +25,8 @@ import java.util.UUID;
 @RequiredArgsConstructor /// shkaf
 public class ClosetServiceImpl implements ClosetService{
     private final ClosetRepository closetRepository;
+    private final FloorService floorService;
+    private final ShelfService shelfService;
 
     @Override
     public String save(ClosetCreateDto dto) {
@@ -52,6 +58,17 @@ public class ClosetServiceImpl implements ClosetService{
     public ClosetResponseDto getById(UUID closetId) {
         ClosetEntity closetEntity = closetRepository.findById(closetId).orElseThrow(() -> new DataNotFoundException("Floor not found"));
         return parse(closetEntity);
+    }
+
+    /**
+     *bu methodga bitta qavat raqami kirib keladi . osha qavatning shkaflarini topib keladi.
+     * @param floorNumber
+     * @return
+     */
+    @Override
+    public List<ClosetEntity> getCloses(Integer floorNumber) {
+        UUID floor = floorService.findByFloor(floorNumber);
+        return closetRepository.findAllByFloorId(floor);
     }
 
     private List<ClosetResponseDto> parse(List<ClosetEntity> entities){
