@@ -76,7 +76,7 @@ public class ShelfServiceImpl implements ShelfService{
         List<ShelfResponseDto> list = new ArrayList<>();
         for (ClosetEntity close : closes) {
             FloorResponseDto byId = floorService.getById(close.getFloorId());
-            ShelfEntity allByClosetIdAndRowNumber = shelfRepository.findAllByClosetIdAndRowNumber(close.getId(), byId.getNumber()).orElseThrow(()-> new DataNotFoundException(""));
+            ShelfEntity allByClosetIdAndRowNumber = shelfRepository.findAllByClosetIdAndRowNumber(close.getId(), byId.getNumber()).orElseThrow(()-> new DataNotFoundException("Shelf not found"));
             int nowCount = 20 - allByClosetIdAndRowNumber.getCountOfBook();
             list.add(new ShelfResponseDto(byId.getNumber(), allByClosetIdAndRowNumber.getId(), close.getId(), nowCount));
         }
